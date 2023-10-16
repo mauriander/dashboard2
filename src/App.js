@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import styled from "styled-components";
 import CardTemp from "./components/CardTemp";
 import CardTermo from "./components/CardTermo";
@@ -9,8 +9,8 @@ import imagenClima from "./Clouds.png";
 import CardBox from "./components/CardBox";
 import Modo from "./components/Modo";
 import BarChart from "./components/BarChart";
-import { UserData } from "./data";
-import  Data  from "./api.json";
+
+//import  Data  from "./api.json";
 
 import { Bar } from "react-chartjs-2";
 const Imagen = styled.div`
@@ -41,7 +41,7 @@ const AppTotal = styled.div`
   }
 `;
 const LeftColumn = styled.div`
-  width: 50%;
+  width: 20%;
   height: 100vh;
   padding: 16px;
   box-sizing: border-box;
@@ -56,9 +56,9 @@ const LeftColumn = styled.div`
 `;
 
 const RightColumn = styled.div`
-  width: 50%;
+  width: 30%;
  height: 100vh;
-  padding: 16px;
+  padding: 12px;
   box-sizing: border-box;
   display: grid;
   flex-direction: column;
@@ -107,104 +107,101 @@ function App() {
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
   };
+  
+ const [uData, setUData] = useState(null);
+  const [userData, setUserData] = useState(null);
+  const [Data, setData] = useState(null);
 
-  const imagen = "Snow"; // Snow.png haze.png cloud.png
-  const direccion = "./img/" + imagen + ".png";
-  const [imgclima, setImgClima] = useState(direccion);
-  const labels = []; // Reemplaza con tus etiquetas reales
-  const data = [];
-  const [userData, setUserData] = useState({
-    options: {
-      maintainAspectRatio: false,
-      scales: {
-        y: {
-          stacked: true,
-          grid: {
-            display: true,
-            color: "rgba(255,99,132,0.2)",
-          },
-        },
-        x: {
-          grid: {
-            display: false,
-          },
-        },
-      },
-    },
-    labels: UserData.map((data) => data.hora),
-    datasets: [
-      {
-        label: "Temperatura/hora",
-        data: UserData.map((data) => data.temperatura),
-        borderRadius: 16,
-        color: "white",
-        backgroundColor: "rgba(255,255,132,0.2)",
-        borderColor: "rgba(255,99,132,1)",
-        borderWidth: 1,
-        hoverBackgroundColor: "rgba(255,255,132,0.4)",
-      },
-    ],
-  });
+  useEffect(() => {
+     fetch(
+      "https://api.open-meteo.com/v1/forecast?latitude=-31.4135&longitude=-64.181&hourly=temperature_2m,relativehumidity_2m,weathercode,visibility,temperature_80m,temperature_120m,temperature_180m&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,windspeed_10m_max&current_weather=true&timezone=America%2FSao_Paulo"
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        setData(data);
+      })
+      .catch((ex) => {
+        console.error(ex);
+      });
+  }, []);
 
-  const [uData, setuData] = useState({
-    options: {
-      maintainAspectRatio: false,
-      scales: {
-        y: {
-         
-             stacked: true,
-          grid: {
-            display: true,
-            color: "rgba(255,99,132,0.2)",
+ useEffect(() => {
+   console.log('entro setudata');
+  if (Data) {
+    console.log('entro data');
+    if (Data.hourly) {
+      console.log('entro hourly');
+      const horas = Data.hourly.time.slice(0,24).map((fechaCompleta) => fechaCompleta.slice(11, 16));
+      const temperaturas = Data.hourly.temperature_2m.slice(0,24);
+      const uData = {
+        options: {
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              stacked: true,
+              grid: {
+                display: true,
+                color: "rgba(255,99,132,0.2)",
+              },
+            },
+            x: {
+              grid: {
+                display: false,
+              },
+            },
           },
-                    
         },
-        x: {
-          grid: {
-            display: false,
+        labels: horas,
+        datasets: [
+          {
+            label: "Temperatura ºC",
+            data: temperaturas,
+            borderRadius: 16,
+            color: "white",
+            backgroundColor: "rgba(255,255,132,0.2)",
+            borderColor: "rgba(255,99,132,1)",
+            borderWidth: 1,
+            hoverBackgroundColor: "rgba(255,255,132,0.4)",
           },
-        },
-      },
-    },
-    // labels: uData.map((data) => data.hourly.time),
-    labels: (Data.hourly.time.map((fechaCompleta) => fechaCompleta.slice(11, 16))),
-    datasets: [
-      {
-        label: "Temperatura ºC",
-        // data: uData.map((data) => data.hourly.temperature_2m),
-         data: (Data.hourly.temperature_2m),
-        
-        borderRadius: 16,
-        color: "white",
-        backgroundColor: "rgba(255,255,132,0.2)",
-        borderColor: "rgba(255,99,132,1)",
-        borderWidth: 1,
-        hoverBackgroundColor: "rgba(255,255,132,0.4)",
-      },
-    ],
-  });
+        ],
+      };
+
+      setUData(uData);
+     
+      
+    }
+  }
+}, [Data]);
+
+  if (Data === null || uData === null) {
+    return <div>Loading...</div>;
+  }
+ ;
 
   return (
     <AppTotal isDarkMode={isDarkMode}>
-      <LeftColumn>
-        <ToggleButton onClick={toggleDarkMode} isDarkMode={isDarkMode}>
+      
+        <LeftColumn>
+          <ToggleButton onClick={toggleDarkMode} isDarkMode={isDarkMode}>
           {isDarkMode ? "Modo Claro" : "Modo Oscuro"}
-        </ToggleButton>
-        <CardTermo />
+          </ToggleButton>
+        <CardTermo Data={Data}  />
 
         <Imagen>
-          <img src={imagenClima} alt="Clima" style={{ width: "15vh" }} />
+          <img src={imagenClima} alt="Clima" style={{ width: "10vh" }} />
         </Imagen>
 
-        <CardTemp />
-      </LeftColumn>
-
-      <RightColumn>
+        <CardTemp Data={Data} />
+        </LeftColumn>
+        <RightColumn>
+    
+        
         <Barrdiv>
-          <BarChart chartData={uData} options={uData.options} />
+          <BarChart chartData={uData} options={uData.options} /> 
         </Barrdiv>
-
-        <CardBox isDarkMode={isDarkMode} />
+        <CardBox isDarkMode={isDarkMode} />    
+      
+    
       </RightColumn>
     </AppTotal>
   );

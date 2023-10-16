@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { UserData } from "../data";
+
 import ReactSpeedometer from "react-d3-speedometer";
 import Gauge from "react-canvas-gauge";
-import  Data  from "../api.json";
+//import  Data  from "../api.json";
 import { FaClock, FaMapMarked, FaMapMarker, FaMarker, FaRegHeart, FaThermometer, FaThermometerQuarter, FaWind } from 'react-icons/fa';
 
 // import SpeedoButton from "../speedo-button";
@@ -12,14 +12,14 @@ import { FaClock, FaMapMarked, FaMapMarker, FaMarker, FaRegHeart, FaThermometer,
 
 
 const Termo2 = styled.div`
-  width: 35vh;
-  height: 35vh;
+  width: 20vh;
+  height: 25vh;
 `;
 
 const Termo = styled.div`
-  width: 100%;
+  width: 90%;
   height: auto;
-  padding:16px;
+  padding:8px;
   margin:16px;
   justify-content:center;
   box-shadow: 0 2px 30px rgba(0, 0, 0, 0.2);
@@ -52,7 +52,7 @@ ${'' /* align-items:flex-end; */}
   
 `;
 
-function CardTermo() {
+function CardTermo({Data}) {
   // const promedioTemperatura =
   //   UserData.reduce((total, data) => total + data.temperatura, 0) /
   //   UserData.length;
