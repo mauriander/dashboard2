@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import styled from "styled-components";
 
 import ReactSpeedometer from "react-d3-speedometer";
@@ -27,6 +27,13 @@ const Termo = styled.div`
 
   text-align: center;
   background: transparent;
+
+    @media (max-width: 480px) {
+      margin:32px;
+      padding:16px;
+    justify-content: center;
+    align-items: center;
+      }
 `;
 
 
@@ -52,7 +59,7 @@ ${'' /* align-items:flex-end; */}
   
 `;
 
-function CardTermo({Data}) {
+function CardTermo({Data,city}) {
   // const promedioTemperatura =
   //   UserData.reduce((total, data) => total + data.temperatura, 0) /
   //   UserData.length;
@@ -64,6 +71,8 @@ const [tempact, setTempact] = useState(Data.current_weather.temperature.toFixed(
 const [wind, setWind] = useState(Data.current_weather.windspeed.toFixed(1));
 const [windd, setWindd] = useState(Data.current_weather.winddirection.toFixed(0));
 const [hora, setHora] = useState(Data.current_weather.time.slice(11,16));
+const [ciudad, setCiudad] = useState(city);
+  
   return (
  
     <Termo>
@@ -83,7 +92,7 @@ scaleList={[
   { scale: 5, quantity: 4, startColor: '#f7dc6f', endColor: '#ff4e50' }  // Amarillo a Rojo
 ]}
 />
-<Ciudad><FaMapMarker/>Cordoba</Ciudad>
+<Ciudad><FaMapMarker/>{ciudad}</Ciudad>
  <Temperatura> <FaClock />{hora} &nbsp; <FaThermometerQuarter/>{tempact}{Data.hourly_units.temperature_2m}</Temperatura><Temperatura> <FaWind />{wind}{Data.daily_units.windspeed_10m_max}&nbsp;  {windd}{"º"}</Temperatura>
  
       

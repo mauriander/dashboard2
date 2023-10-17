@@ -111,10 +111,33 @@ function App() {
  const [uData, setUData] = useState(null);
   const [userData, setUserData] = useState(null);
   const [Data, setData] = useState(null);
+  const [WeatherData, setWeatherData] = useState(null);
+  const [city , setCity]= useState(null);
 
-  useEffect(() => {
-     fetch(
-      "https://api.open-meteo.com/v1/forecast?latitude=-31.4135&longitude=-64.181&hourly=temperature_2m,relativehumidity_2m,weathercode,visibility,temperature_80m,temperature_120m,temperature_180m&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,windspeed_10m_max&current_weather=true&timezone=America%2FSao_Paulo"
+const APP_ID = '4090239d69cdb3874de692fd18539299';
+ useEffect(() => {
+navigator.geolocation.getCurrentPosition((position) => {
+    const { latitude, longitude } = position.coords;
+    fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${APP_ID}`)
+      .then(response => response.json())
+      .then(datas => {
+        setWeatherData(datas);
+        setCity(datas.name);
+           
+        
+      })
+      .catch(error => {
+        console.error(error); // o mostrar el error en la interfaz de usuario
+      });
+});
+}, []);
+
+ useEffect(() => {
+
+  navigator.geolocation.getCurrentPosition((position) => {
+    const { latitude, longitude } = position.coords;
+    fetch(
+      `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,relativehumidity_2m,weathercode,visibility,temperature_80m,temperature_120m,temperature_180m&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,windspeed_10m_max&current_weather=true&timezone=America%2FSao_Paulo`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -123,14 +146,19 @@ function App() {
       .catch((ex) => {
         console.error(ex);
       });
-  }, []);
+  });
+
+
+}, []);
+
+
 
  useEffect(() => {
-   console.log('entro setudata');
+  // console.log('entro setudata');
   if (Data) {
-    console.log('entro data');
+    //console.log('entro data');
     if (Data.hourly) {
-      console.log('entro hourly');
+   //   console.log('entro hourly');
       const horas = Data.hourly.time.slice(0,24).map((fechaCompleta) => fechaCompleta.slice(11, 16));
       const temperaturas = Data.hourly.temperature_2m.slice(0,24);
       const uData = {
@@ -173,7 +201,7 @@ function App() {
   }
 }, [Data]);
 
-  if (Data === null || uData === null) {
+  if (Data === null || uData === null || WeatherData ===null) {
     return <div>Loading...</div>;
   }
  ;
@@ -183,12 +211,12 @@ function App() {
       
         <LeftColumn>
           <ToggleButton onClick={toggleDarkMode} isDarkMode={isDarkMode}>
-          {isDarkMode ? "Modo Claro" : "Modo Oscuro"}
+          {isDarkMode ? "Modo Claro" : "Modo Oscuro"}  
           </ToggleButton>
-        <CardTermo Data={Data}  />
-
+        <CardTermo Data={Data} city={city} />
         <Imagen>
           <img src={imagenClima} alt="Clima" style={{ width: "10vh" }} />
+         
         </Imagen>
 
         <CardTemp Data={Data} />
@@ -199,7 +227,7 @@ function App() {
         <Barrdiv>
           <BarChart chartData={uData} options={uData.options} /> 
         </Barrdiv>
-        <CardBox isDarkMode={isDarkMode} />    
+        <CardBox isDarkMode={isDarkMode} Data={Data}  />    
       
     
       </RightColumn>

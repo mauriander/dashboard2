@@ -6,7 +6,7 @@ La aplicación del clima en React es un proyecto que se enfoca en brindar a los 
 
 ### Visualización del Tiempo Actual
 
-La aplicación muestra la temperatura actual, la velocidad del viento, la dirección del viento y el estado del tiempo en tiempo real para una ubicación específica. Los datos son proporcionados a traves de un archivo estatico tipo JSON llamado 'api.json' pero en el futuro se consumiran los datos de un API.
+La aplicación muestra la temperatura actual, la velocidad del viento, la dirección del viento y el estado del tiempo en tiempo real para una ubicación específica. Los datos son proporcionados a traves de una API.
 
 ### Pronóstico Horario
 

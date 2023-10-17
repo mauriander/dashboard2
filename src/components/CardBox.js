@@ -68,10 +68,8 @@ const Titulo = styled.h3`
   font-size: 16px;
   text-align: center;
 `;
-const url =
-  "https://api.open-meteo.com/v1/forecast?latitude=-31.4135&longitude=-64.181&hourly=temperature_2m,relativehumidity_2m,weathercode,visibility,temperature_80m,temperature_120m,temperature_180m&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,windspeed_10m_max&current_weather=true&timezone=America%2FSao_Paulo";
 
-function CardBox() {
+function CardBox({Data}) {
   const [userhData, setUserhData] = useState(null);
   const [userwvData, setUserwvData] = useState(null);
   // const [useraqData, setUseraqData] = useState(null);
@@ -79,22 +77,22 @@ function CardBox() {
   const [useruvData, setUseruvData] = useState(null);
   const [usersriseData, setUsersriseData] = useState(null);
   const [usersrssetData, setUserssetData] = useState(null);
-  const [Data, setData] = useState(null);
-  useEffect(() => {
-    fetch(
-      "https://api.open-meteo.com/v1/forecast?latitude=-31.4135&longitude=-64.181&hourly=temperature_2m,relativehumidity_2m,weathercode,visibility,temperature_80m,temperature_120m,temperature_180m&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,windspeed_10m_max&current_weather=true&timezone=America%2FSao_Paulo"
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        setData(data);
-      })
-      .catch((ex) => {
-        console.error(ex);
-      });
-  }, []);
+ // const [Data, setData] = useState(null);
+  // useEffect(() => {
+  //   fetch(
+  //     "https://api.open-meteo.com/v1/forecast?latitude=-31.4135&longitude=-64.181&hourly=temperature_2m,relativehumidity_2m,weathercode,visibility,temperature_80m,temperature_120m,temperature_180m&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,windspeed_10m_max&current_weather=true&timezone=America%2FSao_Paulo"
+  //   )
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setData(data);
+  //     })
+  //     .catch((ex) => {
+  //       console.error(ex);
+  //     });
+  // }, []);
 
   useEffect(() => {
-    if (Data) {
+     if (Data) {
       const averageRelativeHumidity =
         Data.hourly.relativehumidity_2m.reduce((acc, value) => acc + value, 0) /
         Data.hourly.relativehumidity_2m.length;
@@ -115,12 +113,12 @@ function CardBox() {
       //sunrise and sunset
       setUsersriseData(Data.daily.sunrise[0].slice(11, 16));
       setUserssetData(Data.daily.sunset[0].slice(11, 16));
-    }
-  }, [Data]);
+     }
+   }, [Data]);
 
-  if (Data === null) {
+   if (Data === null) {
     return <div>Loading...</div>;
-  }
+   }
 
   //aq air quality
 
@@ -213,10 +211,10 @@ function CardBox() {
       <Card>
         <Titulo>Calidad de aire</Titulo>
         <Columna>
-          <Numero>{65} </Numero>
+          <Numero>{95} </Numero>
           <Progress.Line
-            percent={65}
-            strokeColor={"yellow"}
+            percent={95/3}
+            strokeColor={"orange"}
             vertical={true}
             showInfo={false}
             strokeWidth={16}

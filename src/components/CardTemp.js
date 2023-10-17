@@ -12,6 +12,12 @@ const TotalTemp = styled.div`
   ${
     "" /* background-image: linear-gradient(-220deg, #f83600 0%, #f9d423 100%);  */
   }
+    @media (max-width: 480px) {
+       margin:32px;
+     
+    justify-content: center;
+    align-items: center;
+      }
 `;
 
 const LeftColumn = styled.div`
@@ -25,8 +31,8 @@ const LeftColumn = styled.div`
 `;
 
 const Numero = styled.h1`
-font-size:24px;
-  height: 40px;
+  font-size:22px;
+  height: 48px;
   
   font-weight: bold;
   color: rgba(22, 22, 22, 0.92);
@@ -34,7 +40,7 @@ font-size:24px;
 
 const RightColumn = styled.div`
   flex: 0 0 50%;
- 
+  
   text-align: center;
   box-sizing: border-box;
   border-radius: 0 36px 8px 0;
