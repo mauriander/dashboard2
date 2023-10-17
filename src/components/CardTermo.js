@@ -72,7 +72,7 @@ const [wind, setWind] = useState(Data.current_weather.windspeed.toFixed(1));
 const [windd, setWindd] = useState(Data.current_weather.winddirection.toFixed(0));
 const [hora, setHora] = useState(Data.current_weather.time.slice(11,16));
 const [ciudad, setCiudad] = useState(city);
-  
+ 
   return (
  
     <Termo>

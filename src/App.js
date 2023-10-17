@@ -115,24 +115,10 @@ function App() {
   const [city , setCity]= useState(null);
 
 const APP_ID = '4090239d69cdb3874de692fd18539299';
- useEffect(() => {
-navigator.geolocation.getCurrentPosition((position) => {
-    const { latitude, longitude } = position.coords;
-    fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${APP_ID}`)
-      .then(response => response.json())
-      .then(datas => {
-        setWeatherData(datas);
-        setCity(datas.name);
-           
-        
-      })
-      .catch(error => {
-        console.error(error); // o mostrar el error en la interfaz de usuario
-      });
-});
-}, []);
+
 
  useEffect(() => {
+
 
   navigator.geolocation.getCurrentPosition((position) => {
     const { latitude, longitude } = position.coords;
@@ -146,11 +132,42 @@ navigator.geolocation.getCurrentPosition((position) => {
       .catch((ex) => {
         console.error(ex);
       });
+      fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${APP_ID}`)
+      .then(response => response.json())
+      .then(datas => {
+        //setWeatherData(datas);
+        setCity(datas.name);
+        console.log('ciudad'+ datas.name);
+         
+           
+        
+      })
+      .catch(error => {
+        console.error(error); // o mostrar el error en la interfaz de usuario
+      });
   });
 
 
-}, []);
 
+}, []);
+//  useEffect(() => {
+    // navigator.geolocation.getCurrentPosition((position) => {
+    // const { latitude, longitude } = position.coords;
+    // fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${APP_ID}`)
+    //   .then(response => response.json())
+    //   .then(datas => {
+    //     //setWeatherData(datas);
+    //     setCity(datas.name);
+    //     console.log('ciudad'+ datas.name);
+         
+           
+        
+    //   })
+    //   .catch(error => {
+    //     console.error(error); // o mostrar el error en la interfaz de usuario
+    //   });
+//});
+// }, []);
 
 
  useEffect(() => {
@@ -201,7 +218,7 @@ navigator.geolocation.getCurrentPosition((position) => {
   }
 }, [Data]);
 
-  if (Data === null || uData === null || WeatherData ===null) {
+  if (Data === null || uData === null) {
     return <div>Loading...</div>;
   }
  ;
