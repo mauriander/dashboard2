@@ -9,10 +9,12 @@ import imagenClima from "./Clouds.png";
 import CardBox from "./components/CardBox";
 import Modo from "./components/Modo";
 import BarChart from "./components/BarChart";
+import {Bar} from 'react-chartjs-2';
+import {Chart as ChartJS} from 'chart.js/auto';
+import Transport from "./components/Transport";
 
 //import  Data  from "./api.json";
 
-import { Bar } from "react-chartjs-2";
 const Imagen = styled.div`
   width: 15vh;
   height: 15vh;
@@ -70,6 +72,22 @@ const RightColumn = styled.div`
   }
 `;
 
+const TransportColumn = styled.div`
+  width: 50%;
+  height: 100vh;
+
+  box-sizing: border-box;
+  
+  flex-direction: column;
+  flex-wrap: wrap;
+ 
+
+  @media (max-width: 480px) {
+    width:100%;
+
+  }
+`;
+
 const Barrdiv = styled.div`
    display: flex;
   justify-content: center;
@@ -99,6 +117,18 @@ const ToggleButton = styled.button`
   z-index: 2;  
 `;
 
+const ToggleButtonmc = styled.button`
+  background-color: ${(props) => (props.isMap ? "#154360" : "#FCF3CF")};
+  color: ${(props) => (props.isMap ? "#FCF3CF" : "#154360")}; 
+  border: none;
+  cursor: pointer;
+  width: 136px;
+ position: fixed;
+  top: 16px;
+  right: 56px;
+  transform: translateX(-50%);
+  z-index: 999;  
+`;
 
 
 
@@ -107,21 +137,34 @@ function App() {
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
   };
+
+   const [isMap, setIsMap] = useState(false);
+  const toggleMap = () => {
+    setIsMap(!isMap);
+  };
   
  const [uData, setUData] = useState(null);
   const [userData, setUserData] = useState(null);
   const [Data, setData] = useState(null);
   const [WeatherData, setWeatherData] = useState(null);
   const [city , setCity]= useState(null);
+const[latitud,setLatitud]= useState(null);
+const [longitud, setLongitud]= useState(null);
 
+ const [transportDatat, setTransportData] = useState(null);
 const APP_ID = '4090239d69cdb3874de692fd18539299';
 
+const CLIENT_ID='cb6b18c84b3b484d98018a791577af52';
+const CLIENT_SECRET='3e3DB105Fbf642Bf88d5eeB8783EE1E6';
+const ROUTE_ID='1703';
 
  useEffect(() => {
 
 
   navigator.geolocation.getCurrentPosition((position) => {
     const { latitude, longitude } = position.coords;
+    setLatitud(latitude);
+    setLongitud(longitude);
     fetch(
       `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,relativehumidity_2m,weathercode,visibility,temperature_80m,temperature_120m,temperature_180m&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,windspeed_10m_max&current_weather=true&timezone=America%2FSao_Paulo`
     )
@@ -135,39 +178,43 @@ const APP_ID = '4090239d69cdb3874de692fd18539299';
       fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${APP_ID}`)
       .then(response => response.json())
       .then(datas => {
-        //setWeatherData(datas);
         setCity(datas.name);
-        console.log('ciudad'+ datas.name);
-         
-           
-        
+        console.log('ciudad'+ datas.name);               
       })
       .catch(error => {
         console.error(error); // o mostrar el error en la interfaz de usuario
       });
+
+      //   fetch(`https://apitransporte.buenosaires.gob.ar/colectivos/vehiclePositionsSimple?route_id=${ROUTE_ID}&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}`)
+      //  .then(response => response.json())
+      // .then(datat => {
+      //    setTransportData(datat);
+      //    console.log('datat '+ datat[0]);         
+      // })
+      //  .catch(error => {
+      //    console.error(error); // o mostrar el error en la interfaz de usuario
+      //  });
+
+
+
   });
 
 
 
 }, []);
-//  useEffect(() => {
-    // navigator.geolocation.getCurrentPosition((position) => {
-    // const { latitude, longitude } = position.coords;
-    // fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${APP_ID}`)
-    //   .then(response => response.json())
-    //   .then(datas => {
-    //     //setWeatherData(datas);
-    //     setCity(datas.name);
-    //     console.log('ciudad'+ datas.name);
-         
-           
-        
-    //   })
-    //   .catch(error => {
-    //     console.error(error); // o mostrar el error en la interfaz de usuario
-    //   });
-//});
-// }, []);
+  
+ useEffect(() => {
+      fetch(` https://apitransporte.buenosaires.gob.ar/colectivos/vehiclePositionsSimple?route_id=1703&client_id=cb6b18c84b3b484d98018a791577af52&client_secret=3e3DB105Fbf642Bf88d5eeB8783EE1E6`)
+      .then(response => response.json())
+       .then(datat => {
+          setTransportData(datat);
+         console.log('datat '+datat);         
+       })
+        .catch(error => {
+         console.error(error); // o mostrar el error en la interfaz de usuario
+       });
+ 
+ }, []);
 
 
  useEffect(() => {
@@ -224,7 +271,7 @@ const APP_ID = '4090239d69cdb3874de692fd18539299';
  ;
 
   return (
-    <AppTotal isDarkMode={isDarkMode}>
+    <AppTotal isDarkMode={isDarkMode} isMap={isMap}>
       
         <LeftColumn>
           <ToggleButton onClick={toggleDarkMode} isDarkMode={isDarkMode}>
@@ -246,8 +293,14 @@ const APP_ID = '4090239d69cdb3874de692fd18539299';
         </Barrdiv>
         <CardBox isDarkMode={isDarkMode} Data={Data}  />    
       
-    
+      
       </RightColumn>
+      <TransportColumn>
+       <ToggleButtonmc onClick={toggleMap} isMap={isMap}>
+          {isMap ? "Map" : "Calendar"}  
+          </ToggleButtonmc>
+      <Transport transportDatat={transportDatat} latitud={latitud} longitud={longitud}></Transport> </TransportColumn>
+     
     </AppTotal>
   );
 }
