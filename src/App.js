@@ -12,6 +12,7 @@ import BarChart from "./components/BarChart";
 import {Bar} from 'react-chartjs-2';
 import {Chart as ChartJS} from 'chart.js/auto';
 import Transport from "./components/Transport";
+import SelectorRuta from "./components/SelectorRuta";
 
 //import  Data  from "./api.json";
 
@@ -150,8 +151,23 @@ function App() {
   const [city , setCity]= useState(null);
 const[latitud,setLatitud]= useState(null);
 const [longitud, setLongitud]= useState(null);
+const [transportData,  setTransportData] = useState([]); 
+  const [selectorDeRuta, setSelectorDeRuta] = useState(''); // Initialize selectedRoute state
+   const [loading, setLoading] = useState(false);
 
- const [transportDatat, setTransportData] = useState(null);
+  const eleccionRuta = (selectorDeRuta) => {
+    setSelectorDeRuta(selectorDeRuta);
+  };
+  const [rutaid, setRutaId] = useState('');
+   const handleRouteChange = (selectedRouteID) => {
+    setRutaId(selectedRouteID); // Set the selected route ID as rutaid
+  };
+  const handleDataLoaded = () => {
+    setLoading(false); // Data has been loaded, set loading to false
+  };
+
+
+ //const [transportDatat, setTransportData] = useState(null);
 const APP_ID = '4090239d69cdb3874de692fd18539299';
 
 const CLIENT_ID='cb6b18c84b3b484d98018a791577af52';
@@ -184,37 +200,27 @@ const ROUTE_ID='1703';
       .catch(error => {
         console.error(error); // o mostrar el error en la interfaz de usuario
       });
-
-      //   fetch(`https://apitransporte.buenosaires.gob.ar/colectivos/vehiclePositionsSimple?route_id=${ROUTE_ID}&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}`)
-      //  .then(response => response.json())
-      // .then(datat => {
-      //    setTransportData(datat);
-      //    console.log('datat '+ datat[0]);         
-      // })
-      //  .catch(error => {
-      //    console.error(error); // o mostrar el error en la interfaz de usuario
-      //  });
-
-
-
+    
+       fetch(`https://datosabiertos-transporte-apis.buenosaires.gob.ar/colectivos/vehiclePositionsSimple?&client_id=cb6b18c84b3b484d98018a791577af52&client_secret=3e3DB105Fbf642Bf88d5eeB8783EE1E6`)
+       .then(response => response.json())
+        .then(datat => {
+           setTransportData(datat);
+          console.log('datat '+datat[0]);         
+        })
+         .catch(error => {
+          console.error(error); // o mostrar el error en la interfaz de usuario
+        });
+ 
   });
 
 
 
 }, []);
   
- useEffect(() => {
-      fetch(` https://apitransporte.buenosaires.gob.ar/colectivos/vehiclePositionsSimple?route_id=1703&client_id=cb6b18c84b3b484d98018a791577af52&client_secret=3e3DB105Fbf642Bf88d5eeB8783EE1E6`)
-      .then(response => response.json())
-       .then(datat => {
-          setTransportData(datat);
-         console.log('datat '+datat);         
-       })
-        .catch(error => {
-         console.error(error); // o mostrar el error en la interfaz de usuario
-       });
- 
- }, []);
+
+
+
+
 
 
  useEffect(() => {
@@ -296,11 +302,18 @@ const ROUTE_ID='1703';
       
       </RightColumn>
       <TransportColumn>
-       <ToggleButtonmc onClick={toggleMap} isMap={isMap}>
+       {/* <ToggleButtonmc onClick={toggleMap} isMap={isMap}>
           {isMap ? "Map" : "Calendar"}  
-          </ToggleButtonmc>
-      <Transport transportDatat={transportDatat} latitud={latitud} longitud={longitud}></Transport> </TransportColumn>
-     
+          </ToggleButtonmc> */}
+            <SelectorRuta onRouteChange={handleRouteChange} onDataLoaded={handleDataLoaded} />
+
+         {loading ? ( // Check if data is loading
+          <p>LOADING...</p>
+        ) : (
+          <Transport ruta={rutaid} latitud={latitud} longitud={longitud} />
+        )}
+      
+      </TransportColumn>
     </AppTotal>
   );
 }
