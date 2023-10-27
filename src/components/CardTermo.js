@@ -5,9 +5,10 @@ import ReactSpeedometer from "react-d3-speedometer";
 import Gauge from "react-canvas-gauge";
 //import  Data  from "../api.json";
 import { FaClock, FaMapMarked, FaMapMarker, FaMarker, FaRegHeart, FaThermometer, FaThermometerQuarter, FaWind } from 'react-icons/fa';
-
+import CodigoClima from "../imgclima.json";
 // import SpeedoButton from "../speedo-button";
 // export const ForceRenderTheComponent = () => <SpeedoButton />;
+
 
 
 
@@ -35,7 +36,15 @@ const Termo = styled.div`
     align-items: center;
       }
 `;
-
+const ImagenClima = styled.div`
+  width: 15vh;
+  height: 15vh;
+   display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left:32px;
+  
+`;
 
 
 
@@ -72,6 +81,10 @@ const [wind, setWind] = useState(Data.current_weather.windspeed.toFixed(1));
 const [windd, setWindd] = useState(Data.current_weather.winddirection.toFixed(0));
 const [hora, setHora] = useState(Data.current_weather.time.slice(11,16));
 const [ciudad, setCiudad] = useState(city);
+  const EstadoClima = Data.current_weather.weathercode;
+  const IconoEstadoClima = CodigoClima[EstadoClima].icons
+  const NombreEstadoClima = CodigoClima[EstadoClima].name
+
  
   return (
  
@@ -94,8 +107,7 @@ scaleList={[
 />
 <Ciudad><FaMapMarker/>{ciudad}</Ciudad>
  <Temperatura> <FaClock />{hora} &nbsp; <FaThermometerQuarter/>{tempact}{Data.hourly_units.temperature_2m}</Temperatura><Temperatura> <FaWind />{wind}{Data.daily_units.windspeed_10m_max}&nbsp;  {windd}{"º"}</Temperatura>
- 
-      
+      <img src={IconoEstadoClima} alt="Clima" style={{ width: "10vh" }} />
 
     </Termo>
   );

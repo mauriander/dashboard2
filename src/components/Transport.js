@@ -4,11 +4,7 @@ import SelectorRuta from './SelectorRuta';
 import {  FaClock,FaBus, FaHeart} from 'react-icons/fa';
 import { BsHeartFill, BsHeart } from "react-icons/bs";
 import L from 'leaflet'; // Importa L de leaflet
-const busIcon = new L.divIcon({ 
- html: `${<FaHeart />}`,
-  iconSize: [32, 32], 
-  iconAnchor: [16, 32], 
-});
+
 function Transport({ ruta }) {
   const [transportData, setTransportData] = useState([]);
 
@@ -35,7 +31,7 @@ function Transport({ ruta }) {
 
     const interval = setInterval(() => {
       fetchTransportData();
-    }, 31000);
+    },31000);
 
     return () => {
       clearInterval(interval);
@@ -50,13 +46,15 @@ function Transport({ ruta }) {
       />
 
       {transportData.map((data, index) => (
-        <Marker key={index} position={[data.latitude, data.longitude]} icon={busIcon} >
+        <Marker key={index} position={[data.latitude, data.longitude]} >
           <Popup>
             {/* Puedes personalizar la información del marcador aquí utilizando los datos */}
             <div>
               <p>Información adicional:</p>
+              <p>Ruta: {data.route_short_name}</p>
               <p>Velocidad: {data.speed}</p>
               <p>IDA 1 / VUELTA 0: {data.direction}</p>
+              <p> Empresa: {data.agency_name}</p>
               <p>Destino: {data.trip_headsign}</p>
               <p>ID: {data.id}</p>
               {[data.latitude, data.longitude]}

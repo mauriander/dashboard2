@@ -284,10 +284,10 @@ const ROUTE_ID='1703';
           {isDarkMode ? "Modo Claro" : "Modo Oscuro"}  
           </ToggleButton>
         <CardTermo Data={Data} city={city} />
-        <Imagen>
+        {/* <Imagen>
           <img src={imagenClima} alt="Clima" style={{ width: "10vh" }} />
          
-        </Imagen>
+        </Imagen> */}
 
         <CardTemp Data={Data} />
         </LeftColumn>

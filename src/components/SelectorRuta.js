@@ -38,14 +38,14 @@ margin-top:6px
       <Divisor>
       <select id="routeSelector" onChange={handleRouteChange} style={{ background: 'gray' }}>
         <option value="">Selecciona una ruta</option>
-        {loading ? ( // Check if data is loading
+        {loading ? (
           <option value="" disabled>
             LOADING...
           </option>
         ) : (
           transportData.map((item, index) => (
             <option key={index} value={item.route_short_name}>
-              {item.trip_headsign}
+             {item.route_short_name} {item.trip_headsign}
             </option>
           ))
         )}
