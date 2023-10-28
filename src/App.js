@@ -1,6 +1,6 @@
 import "./App.css";
 import React, { useState,useEffect } from "react";
-import styled from "styled-components";
+import styled, { keyframes }  from "styled-components";
 import CardTemp from "./components/CardTemp";
 import CardTermo from "./components/CardTermo";
 import imagenClima from "./Clouds.png";
@@ -130,7 +130,25 @@ const ToggleButtonmc = styled.button`
   transform: translateX(-50%);
   z-index: 999;  
 `;
+const rotate = keyframes`
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+`;
 
+// Styled component for the loading animation
+const LoadingIcon = styled.div`
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  animation: ${rotate} 2s linear infinite;
+`;
 
 
 function App() {
@@ -272,7 +290,27 @@ const ROUTE_ID='1703';
 }, [Data]);
 
   if (Data === null || uData === null) {
-    return <div>Loading...</div>;
+    return (<div
+  style={{
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100vw',
+    height: '100vh',
+   background: 'linear-gradient(to top, #fef9d7 0%, #a8edea 100%)',
+  }}
+>
+<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <LoadingIcon />
+    </div>
+  <div
+    style={{
+      fontSize: '50px',
+    }}
+  >
+     Loading...
+  </div>
+</div>)
   }
  ;
 

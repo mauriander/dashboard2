@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 // import  Card  from './Card';
 import styled from "styled-components";
-
+import {FaEye, FaWind } from "react-icons/fa";
 import BarChart from "./BarChart";
 import { Progress } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
@@ -144,6 +144,26 @@ function CardBox({Data}) {
      }
    }
 
+
+    const rangeMappingsV = {
+     "0-5": ["Brisas suaves","yellow"],
+     "5-11": ["Vientos suaves", "yellow"],
+   "11-20": ["Vientos leves", "orange"],
+   "21-32": ["Vientos Moderados", "orange"],
+  "33-50": ["Vientos fuertes", "red"],
+   "50-500": ["Vientos muy fuertes", "red"],
+ }
+   function codificarViento(valor) {
+     for (const rango in rangeMappingsV) {
+       const [descripcion, color] = rangeMappingsV[rango];
+     const [min, max] = rango.split("-").map(Number);
+       if (valor >= min && valor <= max) {
+         return [valor, descripcion, color];
+       }
+     }
+   }
+   
+
   // setUseraqData(codificarCalidadDelAire(valor));
   //calcular porcentaje para hacer la grafica suponiendo que 300 es lo peor entonces lo divido directamente ene la tabla por osea valor *100/300 seria  1/3
 
@@ -183,7 +203,9 @@ function CardBox({Data}) {
         <Columna>
           <Numero>{uservData} </Numero>
           <Unidad>km</Unidad>
-        </Columna>
+          </Columna>
+          <Parrafo><FaEye style={{ fontSize: '20px' }}/></Parrafo>
+        
       </Card>
       <Card>
         <Titulo>Humedad</Titulo>
@@ -206,7 +228,10 @@ function CardBox({Data}) {
           <Numero>{userwvData} </Numero>
           <Unidad>{Data.daily_units.windspeed_10m_max}</Unidad>
         </Columna>
-        <Parrafo> Se esperan vientos fuertes</Parrafo>
+        <Parrafo> {codificarViento(userwvData)[1]}   </Parrafo>
+         <Parrafo>
+    <FaWind style={{ color: codificarViento(userwvData)[2], fontSize: '20px' }} />
+  </Parrafo>
       </Card>
       <Card>
         <Titulo>Calidad de aire</Titulo>
