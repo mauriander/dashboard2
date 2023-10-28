@@ -19,41 +19,45 @@ margin-top:6px
       .then((response) => response.json())
       .then((data) => {
         setTransportData(data);
-        setLoading(false); // Data has been loaded, set loading to false
+        setLoading(false); 
       })
       .catch((error) => {
         console.error(error);
-        setLoading(false); // Error occurred, set loading to false
+        setLoading(false); 
       });
   }, []);
 
-  const handleRouteChange = (event) => {
+   const handleRouteChange = (event) => {
     const selectedRouteID = transportData.find((item) => item.route_short_name === event.target.value)?.route_id;
     setSelectedRoute({ name: event.target.value, id: selectedRouteID });
     onRouteChange(selectedRouteID); // Pass the selected route ID to the parent component
-  };
+  }; 
+
 
   return (
     
-      <Divisor>
-      <select id="routeSelector" onChange={handleRouteChange} style={{ background: 'gray' }}>
-        <option value="">Selecciona una ruta</option>
-        {loading ? (
-          <option value="" disabled>
-            LOADING...
-          </option>
-        ) : (
-          transportData.map((item, index) => (
-            <option key={index} value={item.route_short_name}>
-             {item.route_short_name} {item.trip_headsign}
-            </option>
-          ))
-        )}
-      </select>{selectedRoute && (
-        <p>
-          Ruta seleccionada: {selectedRoute.name}</p>
-      )}
+    <Divisor>
+  <select id="routeSelector" onChange={handleRouteChange} style={{ background: 'gray' }}>
+    <option value="">Selecciona una ruta</option>
+    {loading ? (
+      <option value="" disabled>
+        LOADING...
+      </option>
+    ) : (
+      [...new Set(transportData.map(item => item.route_short_name))].sort().map((routeName, index) => (
+        <option key={index} value={routeName}>
+          {routeName} {transportData.find(item => item.route_short_name === routeName)?.trip_headsign}
+        </option>
+      ))
+    )}
+  </select>
+  {selectedRoute && (
+    <p>
+      Ruta seleccionada: {selectedRoute.name}
+    </p>
+  )}
 </Divisor>
+
       
  
   );

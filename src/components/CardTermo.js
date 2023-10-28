@@ -83,7 +83,7 @@ const [hora, setHora] = useState(Data.current_weather.time.slice(11,16));
 const [ciudad, setCiudad] = useState(city);
   const EstadoClima = Data.current_weather.weathercode;
   const IconoEstadoClima = CodigoClima[EstadoClima].icons
-  const NombreEstadoClima = CodigoClima[EstadoClima].name
+
 
  
   return (

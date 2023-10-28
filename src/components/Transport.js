@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup, Icon } from 'react-leaflet';
 import SelectorRuta from './SelectorRuta';
 import {  FaClock,FaBus, FaHeart} from 'react-icons/fa';
 import { BsHeartFill, BsHeart } from "react-icons/bs";
-import L from 'leaflet'; // Importa L de leaflet
+import L from 'leaflet';
 
 function Transport({ ruta }) {
   const [transportData, setTransportData] = useState([]);
@@ -38,6 +38,13 @@ function Transport({ ruta }) {
     };
   }, [ruta]);
 
+   const busIcon = new L.divIcon({
+    className: 'custom-icon',
+    html: `<div>${<BsHeart />}</div>`,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+  });
+
   return (
     <MapContainer center={[-34.60376, -58.38162]} zoom={10} scrollWheelZoom={false} style={{ height: '90vh', margin: '2px' }}>
       <TileLayer
@@ -46,7 +53,8 @@ function Transport({ ruta }) {
       />
 
       {transportData.map((data, index) => (
-        <Marker key={index} position={[data.latitude, data.longitude]} >
+        <Marker 
+     key={index} position={[data.latitude, data.longitude]} >
           <Popup>
             {/* Puedes personalizar la información del marcador aquí utilizando los datos */}
             <div>
