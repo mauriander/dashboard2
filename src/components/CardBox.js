@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 // import  Card  from './Card';
 import styled from "styled-components";
-import {FaEye, FaWind } from "react-icons/fa";
-import BarChart from "./BarChart";
+import {FaCircle, FaEye, FaWind } from "react-icons/fa";
+import {WiHumidity } from "react-icons/wi";
 import { Progress } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
 import sunrise from "../img/sunrise.png";
@@ -162,8 +162,60 @@ function CardBox({Data}) {
        }
      }
    }
+  
    
+      const rangeMappingsVisibilidad = {
+ "0-2": ["Muy Baja", "red"],
+  "2-5": ["Baja", "orange"],
+  "5-10": ["Moderada", "yellow"],
+  "10-20": ["Buena", "lightgreen"],
+  "20-50": ["Muy Buena", "green"],
+  "50-100": ["Excelente", "darkgreen"],
+ }
+   function codificarVisibilidad(valor) {
+     for (const rango in rangeMappingsVisibilidad) {
+       const [descripcion, color] = rangeMappingsVisibilidad[rango];
+     const [min, max] = rango.split("-").map(Number);
+       if (valor >= min && valor <= max) {
+         return [valor, descripcion, color];
+       }
+     }
+   }
 
+const rangeMappingsUVIndex = {
+  "0-2": ["Bajo", "green"],
+  "3-5": ["Moderado", "yellow"],
+  "6-7": ["Alto", "orange"],
+  "8-10": ["Muy Alto", "red"],
+  "11-500": ["Extremadamente Alto", "purple"],
+};
+  function codificarIndiceUV(valor) {
+     for (const rango in rangeMappingsUVIndex) {
+       const [descripcion, color] = rangeMappingsUVIndex[rango];
+     const [min, max] = rango.split("-").map(Number);
+       if (valor >= min && valor <= max) {
+         return [valor, descripcion, color];
+       }
+     }
+   }
+
+   const rangeMappingsHumedad = {
+  "0-20": ["Muy Baja", "red"],
+  "21-40": ["Baja", "orange"],
+  "41-60": ["Moderada", "yellow"],
+  "61-80": ["Alta", "lightblue"],
+  "81-100": ["Muy Alta", "blue"],
+};
+
+function codificarHumedad(valor) {
+  for (const rango in rangeMappingsHumedad) {
+    const [descripcion, color] = rangeMappingsHumedad[rango];
+    const [min, max] = rango.split("-").map(Number);
+    if (valor >= min && valor <= max) {
+      return [valor, descripcion, color];
+    }
+  }
+}
   // setUseraqData(codificarCalidadDelAire(valor));
   //calcular porcentaje para hacer la grafica suponiendo que 300 es lo peor entonces lo divido directamente ene la tabla por osea valor *100/300 seria  1/3
 
@@ -177,12 +229,13 @@ function CardBox({Data}) {
           <Numero>{useruvData} </Numero>
         </Columna>
         <Progress.Line
-          percent={(useruvData * 100) / 15}
-          strokeColor={"#f9d423"}
+          percent={(useruvData * 100) / 11}
+          strokeColor={codificarIndiceUV(useruvData)[2]}
           vertical={false}
           showInfo={false}
           strokeWidth={16}
         />
+            <Parrafo>{codificarIndiceUV(useruvData)[1]}   </Parrafo>
       </Card>
       <Card>
         <Titulo>Puesta del sol</Titulo>
@@ -205,6 +258,8 @@ function CardBox({Data}) {
           <Unidad>km</Unidad>
           </Columna>
           <Parrafo><FaEye style={{ fontSize: '20px' }}/></Parrafo>
+          <Parrafo><FaCircle style={{ color: codificarVisibilidad(uservData)[2]}} /> {codificarVisibilidad(uservData)[1]}   </Parrafo>
+              
         
       </Card>
       <Card>
@@ -214,13 +269,16 @@ function CardBox({Data}) {
           <Unidad>{Data.hourly_units.relativehumidity_2m}</Unidad>
           <Progress.Line
             percent={userhData}
-            strokeColor={" #f9d423"}
+            strokeColor={codificarHumedad(userhData)[2]}
             vertical={true}
             showInfo={false}
             strokeWidth={20}
             style={{ padding: "0px", maxHeight: "18vh" }}
           />
+           
         </Columna>
+        
+           <Parrafo><WiHumidity></WiHumidity>{codificarHumedad(userhData)[1]}   </Parrafo>
       </Card>
       <Card>
         <Titulo>Viento</Titulo>

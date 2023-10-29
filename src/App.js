@@ -118,18 +118,18 @@ const ToggleButton = styled.button`
   z-index: 2;  
 `;
 
-const ToggleButtonmc = styled.button`
-  background-color: ${(props) => (props.isMap ? "#154360" : "#FCF3CF")};
-  color: ${(props) => (props.isMap ? "#FCF3CF" : "#154360")}; 
-  border: none;
-  cursor: pointer;
-  width: 136px;
- position: fixed;
-  top: 16px;
-  right: 56px;
-  transform: translateX(-50%);
-  z-index: 999;  
-`;
+// const ToggleButtonmc = styled.button`
+//   background-color: ${(props) => (props.isMap ? "#154360" : "#FCF3CF")};
+//   color: ${(props) => (props.isMap ? "#FCF3CF" : "#154360")}; 
+//   border: none;
+//   cursor: pointer;
+//   width: 136px;
+//  position: fixed;
+//   top: 16px;
+//   right: 56px;
+//   transform: translateX(-50%);
+//   z-index: 999;  
+// `;
 const rotate = keyframes`
   0% {
     transform: rotate(0deg);
@@ -157,10 +157,10 @@ function App() {
     setIsDarkMode(!isDarkMode);
   };
 
-   const [isMap, setIsMap] = useState(false);
-  const toggleMap = () => {
-    setIsMap(!isMap);
-  };
+  //  const [isMap, setIsMap] = useState(false);
+  // const toggleMap = () => {
+  //   setIsMap(!isMap);
+  // };
   
  const [uData, setUData] = useState(null);
   const [userData, setUserData] = useState(null);
@@ -219,15 +219,15 @@ const ROUTE_ID='1703';
         console.error(error); // o mostrar el error en la interfaz de usuario
       });
     
-       fetch(`https://datosabiertos-transporte-apis.buenosaires.gob.ar/colectivos/vehiclePositionsSimple?&client_id=cb6b18c84b3b484d98018a791577af52&client_secret=3e3DB105Fbf642Bf88d5eeB8783EE1E6`)
-       .then(response => response.json())
-        .then(datat => {
-           setTransportData(datat);
-          console.log('datat '+datat[0]);         
-        })
-         .catch(error => {
-          console.error(error); // o mostrar el error en la interfaz de usuario
-        });
+      //  fetch(`https://datosabiertos-transporte-apis.buenosaires.gob.ar/colectivos/vehiclePositionsSimple?&client_id=cb6b18c84b3b484d98018a791577af52&client_secret=3e3DB105Fbf642Bf88d5eeB8783EE1E6`)
+      //  .then(response => response.json())
+      //   .then(datat => {
+      //      setTransportData(datat);
+      //     console.log('datat '+datat[0]);         
+      //   })
+      //    .catch(error => {
+      //     console.error(error); // o mostrar el error en la interfaz de usuario
+      //   });
  
   });
 
@@ -315,18 +315,14 @@ const ROUTE_ID='1703';
  ;
 
   return (
-    <AppTotal isDarkMode={isDarkMode} isMap={isMap}>
+    <AppTotal isDarkMode={isDarkMode} >
       
         <LeftColumn>
           <ToggleButton onClick={toggleDarkMode} isDarkMode={isDarkMode}>
           {isDarkMode ? "Modo Claro" : "Modo Oscuro"}  
           </ToggleButton>
         <CardTermo Data={Data} city={city} />
-        {/* <Imagen>
-          <img src={imagenClima} alt="Clima" style={{ width: "10vh" }} />
-         
-        </Imagen> */}
-
+      
         <CardTemp Data={Data} />
         </LeftColumn>
         <RightColumn>
@@ -335,7 +331,7 @@ const ROUTE_ID='1703';
         <Barrdiv>
           <BarChart chartData={uData} options={uData.options} /> 
         </Barrdiv>
-        <CardBox isDarkMode={isDarkMode} Data={Data}  />    
+        <CardBox  Data={Data}  />    
       
       
       </RightColumn>
@@ -345,10 +341,10 @@ const ROUTE_ID='1703';
           </ToggleButtonmc> */}
             <SelectorRuta onRouteChange={handleRouteChange} onDataLoaded={handleDataLoaded} />
 
-         {loading ? ( // Check if data is loading
+         {loading ? (
           <p>LOADING...</p>
         ) : (
-          <Transport ruta={rutaid} latitud={latitud} longitud={longitud} />
+          <Transport ruta={rutaid}  />
         )}
       
       </TransportColumn>

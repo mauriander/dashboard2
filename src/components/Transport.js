@@ -1,20 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, Icon } from "react-leaflet";
 import SelectorRuta from "./SelectorRuta";
-import {
-  FaClock,
-  FaBus,
-  FaHeart,
-  FaInfo,
-  FaRoad,
-  FaMarker,
-  FaDirections,
-  FaTachometerAlt,
-  FaMapMarker,
-  FaMapMarked,
-} from "react-icons/fa";
-
+import {  FaBusAlt,  FaBus,   FaInfo,  FaRoad,  FaMarker,  FaDirections,  FaTachometerAlt,  FaMapMarker,  FaMapMarked,} from "react-icons/fa";
 import L from "leaflet";
+import ReactDOMServer from 'react-dom/server';
 
 function Transport({ ruta }) {
   const [transportData, setTransportData] = useState([]);
@@ -64,12 +53,13 @@ function Transport({ ruta }) {
     };
   }, [ruta]);
 
-  const busIcon = new L.divIcon({
-    className: "custom-icon",
-    html: `<div>${(<FaBus></FaBus>)}</div>`,
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-  });
+const busIconHtml = ReactDOMServer.renderToString(<FaBus />);
+const busIcon = new L.divIcon({
+  className: 'custom-icon',
+  html: `<div>${busIconHtml}</div>`,
+  iconSize: [50, 82],
+  iconAnchor: [24, 82],
+});
 
   useEffect(() => {
     const totalDataPoints = transportData.length;
@@ -93,18 +83,16 @@ function Transport({ ruta }) {
 
     //Este mapeo lo sugirio chat gpt para incrementar la key y poder pasarla en el marker    key={mapKey}  center={[latcenter, longcenter]}
     setMapKey((prevKey) => prevKey + 1); // Incrementa la clave
-    console.log(
-      "dentro use efectlat din " +        latcenter +        " vs lat fijo -34.62344       long dinamico" +        longcenter +        " VS long fijo-58.479999"    );
+    // console.log(      "dentro use efectlat din " +        latcenter +        " vs lat fijo -34.62344       long dinamico" +        longcenter +        " VS long fijo-58.479999"    );
   }, [transportData]);
 
-  console.log(
-    "fuera use efect lat din " +      latcenter +      " vs lat fijo -34.62344       long dinamico" +      longcenter +      " VS long fijo-58.479999"  );
+  // console.log(     "fuera use efect lat din " +      latcenter +      " vs lat fijo -34.62344       long dinamico" +      longcenter +      " VS long fijo-58.479999"  );
 
   return (
     <MapContainer
       key={mapKey}
       center={[latcenter, longcenter]}
-      zoom={11}
+      zoom={12}
       scrollWheelZoom={true}
       style={{ height: "90vh", margin: "2px" }}
     >
@@ -114,10 +102,9 @@ function Transport({ ruta }) {
       />
 
       {transportData.map((data, index) => (
-        <Marker key={index} position={[data.latitude, data.longitude]}>
+        <Marker key={index} position={[data.latitude, data.longitude]} icon={busIcon}>
           <Popup>
-            {/* Puedes personalizar la información del marcador aquí utilizando los datos */}
-            <div>
+             <div>
               <span>
                 <FaInfo /> Información:
               </span>
