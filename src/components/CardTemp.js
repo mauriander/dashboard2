@@ -4,47 +4,51 @@ import styled from "styled-components";
 //import  Data  from "../api.json";
 
 const TotalTemp = styled.div`
-  width: 200px;
+  width: auto;
   height: auto;
-
-  margin: 8px;
   display: flex;
-  ${
-    "" /* background-image: linear-gradient(-220deg, #f83600 0%, #f9d423 100%);  */
-  }
+  align-items: center;
+  margin:4px;
+  padding:8px;
+  
     @media (max-width: 480px) {
        margin:32px;
-     
-    justify-content: center;
+     justify-content: center;
     align-items: center;
       }
 `;
 
 const LeftColumn = styled.div`
-  flex: 0 0 50%;
-  
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   border-radius: 8px 0 0 36px;
   box-sizing: border-box;
   text-align: center;
   background-image: linear-gradient(90deg, #f83600 0%, #f9d423 100%);
   font-weight: bold;
+
 `;
 
 const Numero = styled.h1`
-  font-size:22px;
-  height: 48px;
-  
+line-height: 42px; 
+  font-size:20px;
+  height: 42px;  
   font-weight: bold;
   color: rgba(22, 22, 22, 0.92);
 `;
 
 const RightColumn = styled.div`
-  flex: 0 0 50%;
-  
-  text-align: center;
+    flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   box-sizing: border-box;
   border-radius: 0 36px 8px 0;
-
+  text-align: center;
   background-image: linear-gradient(90deg, #f9d423 0%, #30cad7 100%);
   font-weight: bold;
 `;
@@ -61,13 +65,11 @@ function CardTemp({Data}) {
   return (
     <TotalTemp>
       <LeftColumn>
-        Máxima
-        <br />
+        Máxima        
         <Numero> {maximo}{Data.daily_units.temperature_2m_max}</Numero>
       </LeftColumn>
       <RightColumn>
-        Mínima
-        <br />
+        Mínima        
         <Numero>{minimo}{Data.daily_units.temperature_2m_min}</Numero>
       </RightColumn>
     </TotalTemp>

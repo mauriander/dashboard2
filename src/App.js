@@ -28,9 +28,7 @@ const Imagen = styled.div`
 
 const AppTotal = styled.div`
   display: flex;
-    margin: 0;
-    padding: 0;
-     /* Hacemos que la página ocupe toda la altura visible del viewport */
+  
    
 
   background-color: ${(props) => (props.isDarkMode ? "#154360" : "#FCF3CF")};
@@ -44,9 +42,8 @@ const AppTotal = styled.div`
   }
 `;
 const LeftColumn = styled.div`
-  width: 20%;
-  height: 100vh;
-  padding: 16px;
+   width: 20%;
+  height: 100vh;  
   box-sizing: border-box;
   display: grid;
   flex-direction: column;
@@ -59,9 +56,8 @@ const LeftColumn = styled.div`
 `;
 
 const RightColumn = styled.div`
-  width: 30%;
- height: 100vh;
-  padding: 12px;
+ width: 30%;
+ height: 100vh;  
   box-sizing: border-box;
   display: grid;
   flex-direction: column;
@@ -74,14 +70,11 @@ const RightColumn = styled.div`
 `;
 
 const TransportColumn = styled.div`
-  width: 50%;
+ width: 50%;
   height: 100vh;
-
-  box-sizing: border-box;
-  
+  box-sizing: border-box;  
   flex-direction: column;
-  flex-wrap: wrap;
- 
+  flex-wrap: wrap; 
 
   @media (max-width: 480px) {
     width:100%;
@@ -321,33 +314,22 @@ const ROUTE_ID='1703';
           <ToggleButton onClick={toggleDarkMode} isDarkMode={isDarkMode}>
           {isDarkMode ? "Modo Claro" : "Modo Oscuro"}  
           </ToggleButton>
-        <CardTermo Data={Data} city={city} />
-      
-        <CardTemp Data={Data} />
+          <CardTermo Data={Data} city={city} />
+           {/* <CardTemp Data={Data} /> */}
         </LeftColumn>
-        <RightColumn>
-    
-        
-        <Barrdiv>
-          <BarChart chartData={uData} options={uData.options} /> 
-        </Barrdiv>
-        <CardBox  Data={Data}  />    
-      
-      
-      </RightColumn>
-      <TransportColumn>
-       {/* <ToggleButtonmc onClick={toggleMap} isMap={isMap}>
-          {isMap ? "Map" : "Calendar"}  
-          </ToggleButtonmc> */}
+        <RightColumn>   
+          <Barrdiv>
+            <BarChart chartData={uData} options={uData.options} /> 
+          </Barrdiv>
+          <CardBox  Data={Data}  />       
+        </RightColumn>
+        <TransportColumn>
+          {/* <ToggleButtonmc onClick={toggleMap} isMap={isMap}>
+                {isMap ? "Map" : "Calendar"}  
+              </ToggleButtonmc> */}
             <SelectorRuta onRouteChange={handleRouteChange} onDataLoaded={handleDataLoaded} />
-
-         {loading ? (
-          <p>LOADING...</p>
-        ) : (
-          <Transport ruta={rutaid}  />
-        )}
-      
-      </TransportColumn>
+               {loading ? (                <p>LOADING...</p>        ) : (          <Transport ruta={rutaid}  />        )}
+         </TransportColumn>
     </AppTotal>
   );
 }

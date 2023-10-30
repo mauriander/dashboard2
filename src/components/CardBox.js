@@ -15,7 +15,6 @@ const CardBoxDiv = styled.div`
   align-items: center;
   background: transparent;
   background: rgba(255, 255, 255, 0.1);
-
   justify-content: center;
   flex-direction: row;
   flex-wrap: wrap;
