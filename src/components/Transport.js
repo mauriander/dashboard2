@@ -4,6 +4,7 @@ import SelectorRuta from "./SelectorRuta";
 import {  FaBusAlt,  FaBus,   FaInfo,  FaRoad,  FaMarker,  FaDirections,  FaTachometerAlt,  FaMapMarker,  FaMapMarked,} from "react-icons/fa";
 import L from "leaflet";
 import ReactDOMServer from 'react-dom/server';
+import busIcono from "../img/bus-svgrepo-com.svg";
 
 function Transport({ ruta }) {
   const [transportData, setTransportData] = useState([]);
@@ -53,13 +54,25 @@ function Transport({ ruta }) {
     };
   }, [ruta]);
 
-const busIconHtml = ReactDOMServer.renderToString(<FaBus />);
+// const busIconHtml = ReactDOMServer.renderToString(<img width="18" height="18" src="https://img.icons8.com/color/48/bus.png" alt="bus"/>);
+//  const busIcon = new L.divIcon({
+//    className: 'custom-icon',
+//    html: busIconHtml,
+//    iconSize: [50, 82],
+//    iconAnchor: [24, 82],
+//  });
+const busIconHtml = ReactDOMServer.renderToString(<img width="18" height="18" src="https://img.icons8.com/color/48/bus.png" alt="bus"/>);
 const busIcon = new L.divIcon({
   className: 'custom-icon',
-  html: `<div>${busIconHtml}</div>`,
-  iconSize: [50, 82],
-  iconAnchor: [24, 82],
+  html: `<img src="${busIcono}" width="16" height="16" alt="bus" />`,
+  iconSize: [32, 32], // Ajusta el tamaño según las dimensiones de tu imagen SVG
+  iconAnchor: [16, 16], // Ajusta el punto de anclaje según las dimensiones de tu imagen SVG
 });
+
+  //  const busIcon = new L.Icon({
+  //   iconUrl: 'https://iconos8.es/icon/15137/autob%C3%BAs',
+  //   iconSize: [50, 50], 
+  // });
 
   useEffect(() => {
     const totalDataPoints = transportData.length;
@@ -101,8 +114,15 @@ const busIcon = new L.divIcon({
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 
-      {transportData.map((data, index) => (
-        <Marker key={index} position={[data.latitude, data.longitude]} icon={busIcon}>
+         {transportData.map((data, index) => {
+        const markerPosition = [data.latitude, data.longitude];
+
+        return (
+         <Marker
+            key={index}
+            position={markerPosition}
+            icon={busIcon}
+          >
           <Popup>
              <div>
               <span>
@@ -143,8 +163,8 @@ const busIcon = new L.divIcon({
               </a>
             </div>
           </Popup>
-        </Marker>
-      ))}
+        </Marker>);
+         })}
     </MapContainer>
   );
 }
