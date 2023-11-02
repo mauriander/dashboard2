@@ -70,12 +70,18 @@ const Titulo = styled.h3`
 
 function CardBox({Data}) {
   const [userhData, setUserhData] = useState(null);
-  const [userwvData, setUserwvData] = useState(null);
+  const [userwvData, setUserwvData] = useState(0);
   // const [useraqData, setUseraqData] = useState(null);
   const [uservData, setUservData] = useState(null);
   const [useruvData, setUseruvData] = useState(null);
   const [usersriseData, setUsersriseData] = useState(null);
-  const [usersrssetData, setUserssetData] = useState(null);
+  const [usersrssetData, setUserssetData] = useState(0);
+  const [usersppData, setUserppData] = useState(0);
+  const [horaData, setHoraData] = useState(0);
+
+  const [userwvDatac, setUserwvDatac] = useState('');
+   const [userwvDatad, setUserwvDatad] = useState('');
+     
  // const [Data, setData] = useState(null);
   // useEffect(() => {
   //   fetch(
@@ -91,23 +97,39 @@ function CardBox({Data}) {
   // }, []);
 
   useEffect(() => {
+    setHoraData(+Data.current_weather.time.slice(11, 13));
+      console.log('adentro Hora de set'+horaData);
+
+      const hora= +Data.current_weather.time.slice(11, 13);
+       console.log('adentro Hora const'+hora);
      if (Data) {
+      
+   
+      
+      
       const averageRelativeHumidity =
         Data.hourly.relativehumidity_2m.reduce((acc, value) => acc + value, 0) /
         Data.hourly.relativehumidity_2m.length;
-      setUserhData(averageRelativeHumidity.toFixed(0));
+      setUserhData(Data.hourly.relativehumidity_2m[hora]);
 
       //wv wind velocity
-      setUserwvData(Data.daily.windspeed_10m_max[0]);
+      setUserwvData(+Data.daily.windspeed_10m_max[0]);
+      setUserwvDatac((codificarViento(Data.daily.windspeed_10m_max[0].toFixed(0))[2]));
+      setUserwvDatad((codificarViento(Data.daily.windspeed_10m_max[0].toFixed(0)))[1]);
+
 
       //v visibility
       const averageVisibility =
         Data.hourly.visibility.reduce((acc, value) => acc + value, 0) /
         Data.hourly.visibility.length;
-      setUservData((averageVisibility / 1000).toFixed(1));
+      setUservData((Data.hourly.visibility[hora] / 1000).toFixed(1));
+
+
+setUserppData( Data.hourly.precipitation_probability[hora]);
+// console.log('Probabilidad'+ usersppData);
 
       //uv indice uv
-      setUseruvData(Data.daily.uv_index_max[0]);
+      setUseruvData(Data.daily.uv_index_max[0].toFixed(0));
 
       //sunrise and sunset
       setUsersriseData(Data.daily.sunrise[0].slice(11, 16));
@@ -144,17 +166,17 @@ function CardBox({Data}) {
    }
 
 
-    const rangeMappingsV = {
+    const rangeMappingsViento = {
      "0-5": ["Brisas suaves","yellow"],
-     "5-11": ["Vientos suaves", "yellow"],
+     "6-10": ["Vientos suaves", "yellow"],
    "11-20": ["Vientos leves", "orange"],
    "21-32": ["Vientos Moderados", "orange"],
   "33-50": ["Vientos fuertes", "red"],
-   "50-500": ["Vientos muy fuertes", "red"],
+   "51-500": ["Vientos muy fuertes", "red"],
  }
    function codificarViento(valor) {
-     for (const rango in rangeMappingsV) {
-       const [descripcion, color] = rangeMappingsV[rango];
+     for (const rango in rangeMappingsViento) {
+       const [descripcion, color] = rangeMappingsViento[rango];
      const [min, max] = rango.split("-").map(Number);
        if (valor >= min && valor <= max) {
          return [valor, descripcion, color];
@@ -162,6 +184,8 @@ function CardBox({Data}) {
      }
    }
   
+
+   
    
       const rangeMappingsVisibilidad = {
  "0-2": ["Muy Baja", "red"],
@@ -186,7 +210,7 @@ const rangeMappingsUVIndex = {
   "3-5": ["Moderado", "yellow"],
   "6-7": ["Alto", "orange"],
   "8-10": ["Muy Alto", "red"],
-  "11-500": ["Extremadamente Alto", "purple"],
+  "11-50": ["Extremadamente Alto", "red"],
 };
   function codificarIndiceUV(valor) {
      for (const rango in rangeMappingsUVIndex) {
@@ -198,6 +222,23 @@ const rangeMappingsUVIndex = {
      }
    }
 
+    const rangeMappingsLluvia = {
+  "0-30": ["Muy Baja", "green"],
+  "31-50": ["Baja", "lightgreen"],
+  "61-70": ["Moderada", "yellow"],
+  "71-90": ["Alta", "lightblue"],
+  "91-100": ["Muy Alta", "blue"],
+};
+
+  function codificarLluvia(valor) {
+     for (const rango in rangeMappingsLluvia) {
+       const [descripcion, color] = rangeMappingsLluvia[rango];
+     const [min, max] = rango.split("-").map(Number);
+       if (valor >= min && valor <= max) {
+         return [valor, descripcion, color];
+       }
+     }
+   }
    const rangeMappingsHumedad = {
   "0-20": ["Muy Baja", "red"],
   "21-40": ["Baja", "orange"],
@@ -214,6 +255,10 @@ function codificarHumedad(valor) {
       return [valor, descripcion, color];
     }
   }
+
+ 
+
+
 }
   // setUseraqData(codificarCalidadDelAire(valor));
   //calcular porcentaje para hacer la grafica suponiendo que 300 es lo peor entonces lo divido directamente ene la tabla por osea valor *100/300 seria  1/3
@@ -285,25 +330,27 @@ function codificarHumedad(valor) {
           <Numero>{userwvData} </Numero>
           <Unidad>{Data.daily_units.windspeed_10m_max}</Unidad>
         </Columna>
-        <Parrafo> {codificarViento(userwvData)[1]}   </Parrafo>
+      
+        <Parrafo>{userwvDatad} </Parrafo> 
          <Parrafo>
-    <FaWind style={{ color: codificarViento(userwvData)[2], fontSize: '20px' }} />
+    <FaWind style={{ color: userwvDatac  , fontSize: '20px' }} /> 
   </Parrafo>
       </Card>
       <Card>
-        <Titulo>Calidad de aire</Titulo>
+        <Titulo>Prob.lluvia</Titulo>
         <Columna>
-          <Numero>{95} </Numero>
+          <Numero>{usersppData} </Numero>
+           <Unidad>{Data.hourly_units.relativehumidity_2m}</Unidad>
           <Progress.Line
-            percent={95/3}
-            strokeColor={"orange"}
+            percent={usersppData}
+            strokeColor={codificarLluvia(usersppData)[2]}
             vertical={true}
             showInfo={false}
             strokeWidth={16}
             style={{ padding: "0px", maxHeight: "14vh" }}
           />
         </Columna>
-        <Parrafo> {"Moderado"}</Parrafo>
+        <Parrafo> {codificarLluvia(usersppData)[1]}</Parrafo>
       </Card>
     </CardBoxDiv>
   );

@@ -38,30 +38,20 @@ function SelectorRuta({ onRouteChange }) {
 
   return (
     <Divisor>
-      <select
-        id="routeSelector"
-        onChange={handleRouteChange}
-        style={{ background: "gray" }}
-      >
+      <select        id="routeSelector"        onChange={handleRouteChange}        style={{ background: "gray" }}      >
         <option value="">Selecciona una ruta</option>
         {loading ? (
-          <option value="" disabled>
-            LOADING...
-          </option>
-        ) : (
-          [...new Set(transportData.map((item) => item.route_short_name))]
-            .sort()
-            .map((routeName, index) => (
-              <option key={index} value={routeName}>
-                {routeName}{" "}
-                {
-                  transportData.find(
-                    (item) => item.route_short_name === routeName
-                  )?.trip_headsign
-                }
-              </option>
-            ))
-        )}
+  <option value="" disabled>LOADING...</option>
+) : (
+  [...new Set(transportData.map((item) => item.route_short_name))]
+    .filter(Boolean) // Filtrar los valores falsos
+    .sort()
+    .map((routeName, index) => (
+      <option key={index} value={routeName}>
+        {routeName} {transportData.find((item) => item.route_short_name === routeName)?.trip_headsign}
+      </option>
+    ))
+)}
       </select>
       {selectedRoute && <p>Ruta seleccionada: {selectedRoute.name}</p>}
     </Divisor>

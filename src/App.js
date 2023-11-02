@@ -4,6 +4,7 @@ import styled, { keyframes }  from "styled-components";
 import CardTemp from "./components/CardTemp";
 import CardTermo from "./components/CardTermo";
 import imagenClima from "./Clouds.png";
+import {FaMap } from "react-icons/fa";
 
 // import  CardP  from './components/CardP';
 import CardBox from "./components/CardBox";
@@ -13,6 +14,7 @@ import {Bar} from 'react-chartjs-2';
 import {Chart as ChartJS} from 'chart.js/auto';
 import Transport from "./components/Transport";
 import SelectorRuta from "./components/SelectorRuta";
+import Minimap from "./components/MiniMap";
 
 //import  Data  from "./api.json";
 
@@ -177,6 +179,7 @@ const [transportData,  setTransportData] = useState([]);
     setLoading(false); // Data has been loaded, set loading to false
   };
 
+  
 
  //const [transportDatat, setTransportData] = useState(null);
 const APP_ID = '4090239d69cdb3874de692fd18539299';
@@ -184,7 +187,7 @@ const APP_ID = '4090239d69cdb3874de692fd18539299';
 const CLIENT_ID='cb6b18c84b3b484d98018a791577af52';
 const CLIENT_SECRET='3e3DB105Fbf642Bf88d5eeB8783EE1E6';
 const ROUTE_ID='1703';
-
+const [userChoice, setUserChoice] = useState('geolocation'); // Opción predeterminada
  useEffect(() => {
 
 
@@ -193,7 +196,7 @@ const ROUTE_ID='1703';
     setLatitud(latitude);
     setLongitud(longitude);
     fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,relativehumidity_2m,weathercode,visibility,temperature_80m,temperature_120m,temperature_180m&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,windspeed_10m_max&current_weather=true&timezone=America%2FSao_Paulo`
+      `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,relativehumidity_2m,weathercode,visibility,temperature_80m,temperature_120m,temperature_180m,precipitation_probability&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,windspeed_10m_max&current_weather=true&timezone=America%2FSao_Paulo`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -222,11 +225,12 @@ const ROUTE_ID='1703';
       //     console.error(error); // o mostrar el error en la interfaz de usuario
       //   });
  
-  });
+  });}
+  
 
 
 
-}, []);
+, []);
   
 
 
@@ -314,6 +318,16 @@ const ROUTE_ID='1703';
           <ToggleButton onClick={toggleDarkMode} isDarkMode={isDarkMode}>
           {isDarkMode ? "Modo Claro" : "Modo Oscuro"}  
           </ToggleButton>
+         
+    {/* <button
+    onClick={() => setUserChoice('geolocation')}
+    className={userChoice === 'geolocation' ? 'selected' : ''}
+  >
+  <FaMap></FaMap>
+  </button> 
+  <Minimap></Minimap> */}
+ 
+
           <CardTermo Data={Data} city={city} />
            {/* <CardTemp Data={Data} /> */}
         </LeftColumn>

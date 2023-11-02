@@ -17,9 +17,14 @@ function Transport({ ruta }) {
   const ROUTE_ID = "1468";
 
   const fetchTransportData = () => {
-    fetch(
-      `https://apitransporte.buenosaires.gob.ar/colectivos/vehiclePositionsSimple?route_id=${ruta}&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}`
-    )
+      let fetchURL;
+   if (ruta) {
+    fetchURL = `https://datosabiertos-transporte-apis.buenosaires.gob.ar/colectivos/vehiclePositionsSimple?route_id=${ruta}&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}`;
+  } else {
+    fetchURL = `https://datosabiertos-transporte-apis.buenosaires.gob.ar/colectivos/vehiclePositionsSimple?route_id=${ROUTE_ID}&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}`;
+  }
+
+  fetch(fetchURL)
       .then((response) => response.json())
       .then((datat) => {
         setTransportData(datat);
