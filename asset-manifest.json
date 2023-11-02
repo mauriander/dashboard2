@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/dashboard2/static/css/main.0c83916c.css",
-    "main.js": "/dashboard2/static/js/main.393b1691.js",
+    "main.js": "/dashboard2/static/js/main.bc935d72.js",
     "static/js/787.54ad28dd.chunk.js": "/dashboard2/static/js/787.54ad28dd.chunk.js",
     "static/media/Clouds.png": "/dashboard2/static/media/Clouds.2da1f66c8b49736bf613.png",
     "index.html": "/dashboard2/index.html",
     "static/media/bus-svgrepo-com.svg": "/dashboard2/static/media/bus-svgrepo-com.55acd0ee770be5778474efd09bdeacff.svg",
     "main.0c83916c.css.map": "/dashboard2/static/css/main.0c83916c.css.map",
-    "main.393b1691.js.map": "/dashboard2/static/js/main.393b1691.js.map",
+    "main.bc935d72.js.map": "/dashboard2/static/js/main.bc935d72.js.map",
     "787.54ad28dd.chunk.js.map": "/dashboard2/static/js/787.54ad28dd.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.0c83916c.css",
-    "static/js/main.393b1691.js"
+    "static/js/main.bc935d72.js"
   ]
 }
